@@ -14,9 +14,9 @@ function Home() {
       try {
         const popularMovies = await getPopularMovies();
         setMovies(popularMovies);
-      } catch (error) {
+      } catch (err) {
         console.log(err);
-        setError("Fail to load the movies");
+        setError("Failed to load movies...");
       } finally {
         setLoading(false);
       }
@@ -27,22 +27,20 @@ function Home() {
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    if(!searchQuery.trim()) return
-    if(loading) return
-    setLoading(true)
+    if (!searchQuery.trim()) return
+    if (loading) return
 
     setLoading(true)
-    try{
-          const searchResults = await searchMovies(searchQuery)
-          setMovies(searchResults)
-          setError(null)
-    } catch (err){
+    try {
+        const searchResults = await searchMovies(searchQuery)
+        setMovies(searchResults)
+        setError(null)
+    } catch (err) {
         console.log(err)
-        setError("Failed to search movies ...")
-    } finally{
+        setError("Failed to search movies...")
+    } finally {
         setLoading(false)
     }
-    // setSearchQuery("");
   };
 
   return (
@@ -50,7 +48,7 @@ function Home() {
       <form onSubmit={handleSearch} className="search-form">
         <input
           type="text"
-          placeholder="Search for a movie...."
+          placeholder="Search for movies..."
           className="search-input"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
@@ -60,18 +58,15 @@ function Home() {
         </button>
       </form>
 
-      {error && <div lclassName="error-message">{error}</div>}
+        {error && <div className="error-message">{error}</div>}
 
       {loading ? (
         <div className="loading">Loading...</div>
       ) : (
-        <div className="movie-grid">
-          {movies.map(
-            (movie) =>
-              movie.title.toLowerCase().startsWith(searchQuery) && (
-                <MovieCard movie={movie} key={movie.id} />
-              )
-          )}
+        <div className="movies-grid">
+          {movies.map((movie) => (
+            <MovieCard movie={movie} key={movie.id} />
+          ))}
         </div>
       )}
     </div>
